@@ -5,14 +5,15 @@
  *      Author: daviderusso
  */
 #include <iostream>
+#include <math.h>
 #include "FunctionalList/functional_list.hpp"
 
 using namespace std;
 using namespace functional;
 
-#define EXAMPLE_1
+/*#define EXAMPLE_1
 #define EXAMPLE_2
-#define EXAMPLE_3
+#define EXAMPLE_3*/
 
 class Person {
 
@@ -34,6 +35,8 @@ public:
 };
 
 int main() {
+
+	srand(time(NULL));
 
 	functional_list<Person> people = {
 			Person("davide", "russo", 28, Person::gender_t::male),
@@ -82,9 +85,34 @@ int main() {
 #endif
 
 
-	functional_list<Person> n{move(people.filter([] (Person p) { return p.gender == Person::gender_t::female; }))};
-	cout << "\nLe donne sono:\n";
-	n.sort([](Person p1, Person p2) { return p1.age >= p2.age; }).for_each(print_person);
+	functional_list<double> list_of_double;
+	constexpr const double upper_bound = 50.;
+	constexpr const int N = 100;
+
+	for(int i = 0; i < N; i++)
+		list_of_double.add(upper_bound * (double)(rand() % 10000) / 10000.);
+
+	cout << "[";
+	list_of_double.print(", ") << "]\n";
+
+	auto upper_half_list = list_of_double.filter([](double d) { return d >= upper_bound * .5; });
+	auto lower_half_list = list_of_double.filter([](double d) { return d < upper_bound * .5; });
+	cout << "Ci sono " << upper_half_list.count() << " elementi maggiori della metà dell'intervallo\n";
+
+	cout << "La media della metà superiore è: " << upper_half_list.reduce(0.0, [] (double acc, double x) { return acc + x; }) / upper_half_list.count() << endl;
+	cout << "La media della metà inferiore è: " << lower_half_list.reduce(0.0, [] (double acc, double x) { return acc + x; }) / lower_half_list.count() << endl;
+
+	upper_half_list.max().print() << endl;
+	lower_half_list.min().print() << endl;
+
+	auto sorted_lower_half = lower_half_list.sort(true);
+	auto sorted_upper_half = upper_half_list.sort();
+	cout << sorted_lower_half << " " << sorted_upper_half << endl;
+
+	upper_half_list = upper_half_list.map([] (double x) { return x * x; });
+	lower_half_list = lower_half_list.map([] (double x) { return sqrt(x); });
+
+	cout << lower_half_list.sort() << " " << upper_half_list.sort() << endl;
 
 	return 0;
 }

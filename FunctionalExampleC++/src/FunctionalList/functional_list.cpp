@@ -18,11 +18,6 @@ using namespace std;
 //#define DEBUG_P
 
 template<typename T>
-static const T & __min(const T & t1, const T & t2) {
-	return t1 <= t2 ? t1 : t2;
-}
-
-template<typename T>
 functional_list<T>::functional_list() noexcept {
 #ifdef DEBUG_P
 	cout << "Costruttore senza argomenti!\n";
@@ -456,7 +451,7 @@ functional_list<T> functional_list<T>::sort(Func && func) const noexcept {
 template<typename T>
 functional_list<T> functional_list<T>::sort(bool reverse) const noexcept {
 	functional_list<T> fl{*this};
-	std::sort(fl.m_v->begin(), fl.m_v->end(), [reverse](const T & t1, const T & t2) { return reverse ? t1 >= t2 : t2 >= t1; });
+	std::sort(fl.m_v->begin(), fl.m_v->end(), [reverse](const T & t1, const T & t2) { return reverse ? t1 > t2 : t2 > t1; });
 	return fl;
 }
 

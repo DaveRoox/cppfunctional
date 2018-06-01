@@ -47,21 +47,13 @@ namespace functional {
 	template<typename T>
 	class functional_list {
 
-			using test_t = bool(const T &);
-
-			template<typename K>
-			using transform_t = K(const T &);
-
-			template<typename K>
-			using reduc_t = K(const K &, const T &);
-
 		public:
 
 			inline functional_list() noexcept;
 			inline functional_list(const functional_list &) noexcept;
 			inline functional_list(const std::vector<T> &) noexcept;
 			inline functional_list(const std::vector<T> &&) noexcept;
-			inline functional_list(functional_list &&) noexcept; /* todo: risolvere l'inizializzazione rvalue */
+			inline functional_list(functional_list &&) noexcept;
 			inline functional_list(const std::initializer_list<T> &) noexcept;
 			inline functional_list(const std::initializer_list<T> &&) noexcept;
 
@@ -81,19 +73,17 @@ namespace functional {
 
 			functional_list operator[](const std::initializer_list<long> &) const;
 			inline functional_list operator[](const std::initializer_list<long> &&) const;
-
 			inline T & operator[](long);
-
 			inline std::size_t count() const noexcept;
 
 			template<typename Func>
 			inline functional_list filter(Func &&) const noexcept;
 
-			template<typename Func, typename AccType = typename std::result_of<Func(T)>::type>
-			inline AccType reduce(AccType &&, Func &&) const noexcept;
-
 			template<typename Func>
 			inline functional_list<typename std::result_of<Func(T)>::type> map(Func &&) const noexcept;
+
+			template<typename Func, typename AccType = typename std::result_of<Func(T)>::type>
+			inline AccType reduce(AccType &&, Func &&) const noexcept;
 
 			template<typename Func>
 			inline void for_each(Func &&) const noexcept;
@@ -119,9 +109,9 @@ namespace functional {
 
 			inline functional_list uniques() const noexcept;
 
-			inline bool contains(T &) const noexcept; // bottleneck: O(n)
-			inline bool contains(const T &) const noexcept; // bottleneck: O(n)
-			inline bool contains(const T &&) const noexcept; // bottleneck: O(n)
+			inline bool contains(T &) const noexcept; // todo: bottleneck: O(n); O(1) through hashing; hashing for custom classes?
+			inline bool contains(const T &) const noexcept; // todo: same
+			inline bool contains(const T &&) const noexcept; // todo: same
 
 			inline functional_list limit_to(unsigned long) const noexcept;
 
