@@ -194,7 +194,7 @@ functional_list<T> functional_list<T>::operator[](const std::initializer_list<lo
 	if(step > 0) {
 
 		if(normalized_end >= normalized_start)				// [ ... start >>> ... >>> end ... ]
-			for(long i = normalized_start; i <= normalized_end; i += step)
+			for(unsigned long i = normalized_start; i <= normalized_end; i += step)
 				ranged_list.add((*this->m_v)[i]);
 		else {												// [ ... >>> end ... start >>> ... ]
 			long i, ssize = v_size;
@@ -209,7 +209,7 @@ functional_list<T> functional_list<T>::operator[](const std::initializer_list<lo
 	else { // step < 0
 
 		if(normalized_end <= normalized_start)				// [ ... end <<< ... <<< start ... ]
-			for(long i = normalized_start; i >= normalized_end; i += step)
+			for(unsigned long i = normalized_start; i >= normalized_end; i += step)
 				ranged_list.add((*this->m_v)[i]);
 		else {												// [ ... <<< start ... end <<< ... ]
 			long i;
@@ -258,7 +258,7 @@ unsigned long functional_list<T>::m_normalize_index(long index) const noexcept {
 
 template<typename T>
 std::ostream& functional_list<T>::print(const std::string & separator, std::ostream & out) const noexcept {
-	for(int i = 0, size = this->m_v->size() - 1; i < size; i++)
+	for(unsigned long i = 0, size = this->m_v->size() - 1; i < size; i++)
 		out << (*this->m_v)[i] << separator;
 	if(this->m_v->size() > 0)
 		out << (*this->m_v)[this->m_v->size() - 1];
@@ -340,7 +340,7 @@ functional_list<T> functional_list<T>::m_compare(Func && key, bool greater) cons
 	functional_list<T> results {*_value};
 
 	if(greater) {
-		for(int i = 1; i < size; i++) {
+		for(unsigned long i = 1; i < size; i++) {
 			auto first = key((*this->m_v)[i]);
 			auto second = key(*_value);
 			if(first > second) {
@@ -353,7 +353,7 @@ functional_list<T> functional_list<T>::m_compare(Func && key, bool greater) cons
 		}
 	}
 	else {
-		for(int i = 1; i < size; i++) {
+		for(unsigned long i = 1; i < size; i++) {
 			auto first = key((*this->m_v)[i]);
 			auto second = key(*_value);
 			if(first < second) {
