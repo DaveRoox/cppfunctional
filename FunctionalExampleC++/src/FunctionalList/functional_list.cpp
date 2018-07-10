@@ -52,7 +52,7 @@ functional_list<T>::functional_list(const vector<T> & t_vec) noexcept {
 }
 
 template<typename T>
-functional_list<T>::functional_list(const vector<T> && t_vec) noexcept {
+functional_list<T>::functional_list(vector<T> && t_vec) noexcept {
 #ifdef DEBUG_P
 	cout << "Costruttore con vector &&\n";
 #endif
@@ -115,7 +115,7 @@ functional_list<T> & functional_list<T>::operator=(const functional_list<T> & t_
 }
 
 template<typename T>
-functional_list<T> & functional_list<T>::operator=(const functional_list<T> && t_other) noexcept {
+functional_list<T> & functional_list<T>::operator=(functional_list<T> && t_other) noexcept {
 #ifdef DEBUG_P
 	cout << "Operator di = move\n";
 #endif
@@ -133,10 +133,10 @@ std::size_t functional_list<T>::count() const noexcept {
 
 template<typename T>
 T & functional_list<T>::operator[](long index) {
-	int size = this->m_v->size();
+	unsigned long size = this->m_v->size();
 	if(size == 0)
 		throw empty_list_exception();
-	if(index >= size)
+	if(index >= (long)size)
 		throw index_out_of_range_exception();
 	index = m_normalize_index(index);
 	return (*this->m_v)[index];
@@ -173,7 +173,7 @@ functional_list<T> functional_list<T>::operator[](const std::initializer_list<lo
 		end = values[1];
 		normalized_end = m_normalize_index(end);
 	}
-	if(end >= (long)v_size)
+	if(end >= v_size)
 		throw exceeded_list_size_exception();
 
 	long step = 1;
@@ -194,7 +194,7 @@ functional_list<T> functional_list<T>::operator[](const std::initializer_list<lo
 	if(step > 0) {
 
 		if(normalized_end >= normalized_start)				// [ ... start >>> ... >>> end ... ]
-			for(unsigned long i = normalized_start; i <= normalized_end; i += step)
+			for(long i = normalized_start; i <= normalized_end; i += step)
 				ranged_list.add((*this->m_v)[i]);
 		else {												// [ ... >>> end ... start >>> ... ]
 			long i, ssize = v_size;
@@ -207,10 +207,9 @@ functional_list<T> functional_list<T>::operator[](const std::initializer_list<lo
 
 	}
 	else { // step < 0
-
 		if(normalized_end <= normalized_start)				// [ ... end <<< ... <<< start ... ]
-			for(unsigned long i = normalized_start; i >= normalized_end; i += step)
-				ranged_list.add((*this->m_v)[i]);
+			for(long i = normalized_start; i >= normalized_end; i += step)
+                ranged_list.add((*this->m_v)[i]);
 		else {												// [ ... <<< start ... end <<< ... ]
 			long i;
 			for(i = normalized_start; i >= 0; i += step)	// [ 0 ... <<< start ... ]
@@ -226,7 +225,7 @@ functional_list<T> functional_list<T>::operator[](const std::initializer_list<lo
 }
 
 template<typename T>
-functional_list<T> functional_list<T>::operator[](const std::initializer_list<long> && range) const {
+functional_list<T> functional_list<T>::operator[](std::initializer_list<long> && range) const {
 	return operator[](range);
 }
 
@@ -253,7 +252,7 @@ unsigned long functional_list<T>::m_normalize_index(long index) const noexcept {
 	unsigned long size = this->m_v->size();
 	while(index < 0)
 		index += size;
-	return index;
+	return static_cast<unsigned long>(index);
 }
 
 template<typename T>
@@ -331,7 +330,7 @@ template<typename T>
 template<typename Func>
 functional_list<T> functional_list<T>::m_compare(Func && key, bool greater) const {
 
-	int size = this->m_v->size();
+	unsigned long size = this->m_v->size();
 
 	if(size == 0)
 		throw empty_list_exception();
@@ -366,7 +365,7 @@ functional_list<T> functional_list<T>::m_compare(Func && key, bool greater) cons
 		}
 	}
 
-	return *_value;
+	return results;
 }
 
 template<typename T>

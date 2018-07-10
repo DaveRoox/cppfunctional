@@ -12,32 +12,24 @@
 
 namespace functional {
 
-	class list_exception : std::exception {
-		public:
-			list_exception(const std::string & t_msg): m_msg(t_msg) {}
-			virtual const char* what() const noexcept override { return m_msg.c_str(); }
-		private:
-			std::string m_msg;
+	class empty_list_exception : public std::runtime_error {
+		public: empty_list_exception(): std::runtime_error("Bad index exception: empty list") {}
 	};
 
-	class empty_list_exception : public list_exception {
-		public: empty_list_exception(): list_exception("Bad index exception: empty list") {}
+	class index_out_of_range_exception : public std::runtime_error {
+		public: index_out_of_range_exception() : std::runtime_error("Bad index exception: index out of range") {}
 	};
 
-	class index_out_of_range_exception : public list_exception {
-		public: index_out_of_range_exception() : list_exception("Bad index exception: index out of range") {}
+	class wrong_number_of_parameters_exception : public std::runtime_error {
+		public: wrong_number_of_parameters_exception(): std::runtime_error("Bad range exception: Range must include 2 '<start, end>' or 3 '<start, end, step>' values") {}
 	};
 
-	class wrong_number_of_parameters_exception : public list_exception {
-		public: wrong_number_of_parameters_exception(): list_exception("Bad range exception: Range must include 2 '<start, end>' or 3 '<start, end, step>' values") {}
+	class non_zero_step_exception : public std::runtime_error {
+		public: non_zero_step_exception(): std::runtime_error("Bad range exception: Step cannot be 0") {}
 	};
 
-	class non_zero_step_exception : public list_exception {
-		public: non_zero_step_exception(): list_exception("Bad range exception: Step cannot be 0") {}
-	};
-
-	class exceeded_list_size_exception : public list_exception {
-		public: exceeded_list_size_exception(): list_exception("Bad range exception: End index cannot exceed list size") {}
+	class exceeded_list_size_exception : public std::runtime_error {
+		public: exceeded_list_size_exception(): std::runtime_error("Bad range exception: End index cannot exceed list size") {}
 	};
 
 }
@@ -51,28 +43,26 @@ namespace functional {
 
 			inline functional_list() noexcept;
 			inline functional_list(const functional_list &) noexcept;
-			inline functional_list(const std::vector<T> &) noexcept;
-			inline functional_list(const std::vector<T> &&) noexcept;
+			inline explicit functional_list(const std::vector<T> &) noexcept;
+			inline explicit functional_list(std::vector<T> &&) noexcept;
 			inline functional_list(functional_list &&) noexcept;
 			inline functional_list(const std::initializer_list<T> &) noexcept;
 			inline functional_list(const std::initializer_list<T> &&) noexcept;
 
 			template<typename ... Elems>
-			inline functional_list(const Elems & ...) noexcept;
+			inline explicit functional_list(const Elems & ...) noexcept;
 
 			template<typename ... Elems>
-			inline functional_list(const Elems && ...) noexcept;
+			inline explicit functional_list(const Elems && ...) noexcept;
 
 			inline functional_list & operator=(const functional_list &) noexcept;
-			inline functional_list & operator=(const functional_list &&) noexcept;
+			inline functional_list & operator=(functional_list &&) noexcept;
 
 			inline void add(const T &) noexcept;
 			inline void add(T &&) noexcept;
 
-			//template<typename ... Range> functional_list operator[](const Range & ...);
-
 			functional_list operator[](const std::initializer_list<long> &) const;
-			inline functional_list operator[](const std::initializer_list<long> &&) const;
+			inline functional_list operator[](std::initializer_list<long> &&) const;
 			inline T & operator[](long);
 			inline std::size_t count() const noexcept;
 
