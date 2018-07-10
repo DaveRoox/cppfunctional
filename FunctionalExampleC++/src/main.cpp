@@ -5,6 +5,7 @@
  *      Author: daviderusso
  */
 #include <iostream>
+#include <iomanip>
 #include <random>
 #include "FunctionalList/functional_list.hpp"
 
@@ -69,6 +70,31 @@ int main() {
 
     cout << "--People in reverse order are:--\n";
     people[{-1, 0, -1}].for_each(print_person);
+
+    cout << endl;
+
+    cout << "--The average age is:--\n";
+    cout << fixed << setprecision(2) << people.reduce(0.0, [] (double acc, const person & p) -> double { return acc + p.age; }) / people.count() << endl << endl;
+
+    cout << "--The list of uniques names is:--\n";
+    people
+            .map([] (const person & p) {
+                return p.name;
+            })
+            .uniques()
+            .print() << endl << endl;
+
+    cout << "--Is there at least one girl?--\n";
+    cout << (people.any_match([] (const person & p) { return p.gender == person::gender_t::female; }) ? "YES" : "NO") << endl << endl;
+
+    cout << "--Are there only girls?--\n";
+    cout << (people.each_match([] (const person & p) { return p.gender == person::gender_t::female; }) ? "YES" : "NO") << endl << endl;
+
+    cout << "--The oldest is:--\n";
+    cout << people.max([] (const person & p) { return p.age; }).first().age << " years old" << endl << endl;
+
+    cout << "--The youngest is:--\n";
+    cout << people.min([] (const person & p) { return p.age; }).first().age << " years old" << endl << endl;
 
     return 0;
 }

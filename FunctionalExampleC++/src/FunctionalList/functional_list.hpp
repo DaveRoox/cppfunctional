@@ -88,6 +88,10 @@ namespace functional {
 
 			inline functional_list min() const;
 
+			inline const T & first() const;
+
+			inline const T & last() const;
+
 			template<typename Func>
 			inline bool each_match(Func &&) const noexcept;
 
@@ -97,7 +101,7 @@ namespace functional {
 			template<typename Func>
 			inline bool no_match(Func &&) const noexcept;
 
-			inline functional_list uniques() const noexcept;
+			inline functional_list uniques() const noexcept; // todo: its complexity depends on contains() method. Currently O(n^2)
 
 			inline bool contains(T &) const noexcept; // todo: bottleneck: O(n); O(1) through hashing; hashing for custom classes?
 			inline bool contains(const T &) const noexcept; // todo: same
@@ -108,7 +112,7 @@ namespace functional {
 			template<typename Func>
 			inline functional_list sort(Func &&) const noexcept;
 
-			inline functional_list sort(bool = false) const noexcept;
+			inline functional_list sort(bool descending = false) const noexcept;
 
 			inline std::ostream& print(const std::string & = " ", std::ostream & = std::cout) const noexcept;
 
