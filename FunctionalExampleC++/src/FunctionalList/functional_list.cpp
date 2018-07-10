@@ -15,72 +15,46 @@
 using namespace functional;
 using namespace std;
 
-//#define DEBUG_P
-
 template<typename T>
 functional_list<T>::functional_list() noexcept {
-#ifdef DEBUG_P
-	cout << "Costruttore senza argomenti!\n";
-#endif
 	this->m_v = std::unique_ptr<vector<T>>(new vector<T>());
 }
 
 template<typename T>
 functional_list<T>::functional_list(const functional_list & t_other) noexcept {
-#ifdef DEBUG_P
-	cout << "Costruttore di copia!\n";
-#endif
 	this->m_v = nullptr;
 	*this = t_other;
 }
 
 template<typename T>
 functional_list<T>::functional_list(functional_list && t_other) noexcept {
-#ifdef DEBUG_P
-	cout << "Costruttore di move!\n";
-#endif
 	this->m_v = nullptr;
 	*this = move(t_other);
 }
 
 template<typename T>
 functional_list<T>::functional_list(const vector<T> & t_vec) noexcept {
-#ifdef DEBUG_P
-	cout << "Costruttore con vector &\n";
-#endif
 	this->m_v = std::unique_ptr<vector<T>>(new vector<T>(t_vec));
 }
 
 template<typename T>
 functional_list<T>::functional_list(vector<T> && t_vec) noexcept {
-#ifdef DEBUG_P
-	cout << "Costruttore con vector &&\n";
-#endif
 	this->m_v = std::unique_ptr<vector<T>>(new vector<T>(move(t_vec)));
 }
 
 template<typename T>
 functional_list<T>::functional_list(const std::initializer_list<T> & t_init_list) noexcept {
-#ifdef DEBUG_P
-	cout << "Costruttore con init list copia!\n";
-#endif
 	this->m_v = std::unique_ptr<vector<T>>(new vector<T>(t_init_list));
 }
 
 template<typename T>
 functional_list<T>::functional_list(const std::initializer_list<T> && t_init_list) noexcept {
-#ifdef DEBUG_P
-	cout << "Costruttore con init list move!\n";
-#endif
 	this->m_v = std::unique_ptr<vector<T>>(new vector<T>(move(t_init_list)));
 }
 
 template<typename T>
 template<typename ... Elems>
 functional_list<T>::functional_list(const Elems & ... elems) noexcept {
-#ifdef DEBUG_P
-	cout << "Costruttore template di copia!\n";
-#endif
 	this->m_v = std::unique_ptr<vector<T>>(new vector<T>());
 	for(const T & elem : {elems...})
 		this->m_v->push_back(elem);
@@ -89,9 +63,6 @@ functional_list<T>::functional_list(const Elems & ... elems) noexcept {
 template<typename T>
 template<typename ... Elems>
 functional_list<T>::functional_list(const Elems && ... elems) noexcept {
-#ifdef DEBUG_P
-	cout << "Costruttore template di move\n";
-#endif
 	this->m_v = std::unique_ptr<vector<T>>(new vector<T>());
 	for(const T & elem : {elems...})
 		this->m_v->push_back(move(elem));
@@ -104,9 +75,6 @@ functional_list<T>::~functional_list() noexcept {
 
 template<typename T>
 functional_list<T> & functional_list<T>::operator=(const functional_list<T> & t_other) noexcept {
-#ifdef DEBUG_P
-	cout << "Operator di = copia\n";
-#endif
 	if(this != &t_other) {
 		this->m_v.reset();
 		this->m_v = std::unique_ptr<vector<T>>(new vector<T>(*t_other.m_v));
@@ -116,9 +84,6 @@ functional_list<T> & functional_list<T>::operator=(const functional_list<T> & t_
 
 template<typename T>
 functional_list<T> & functional_list<T>::operator=(functional_list<T> && t_other) noexcept {
-#ifdef DEBUG_P
-	cout << "Operator di = move\n";
-#endif
 	if(this != &t_other) {
 		this->m_v.reset();
 		this->m_v = std::unique_ptr<vector<T>>(new vector<T>(move(*t_other.m_v)));
@@ -133,7 +98,7 @@ std::size_t functional_list<T>::count() const noexcept {
 
 template<typename T>
 T & functional_list<T>::operator[](long index) {
-	unsigned long size = this->m_v->size();
+	std::size_t size = this->m_v->size();
 	if(size == 0)
 		throw empty_list_exception();
 	if(index >= (long)size)
@@ -229,35 +194,17 @@ functional_list<T> functional_list<T>::operator[](std::initializer_list<long> &&
 	return operator[](range);
 }
 
-/*template<typename T>
-template<typename ... Range>
-functional_list<T> functional_list<T>::operator[](const Range & ... range) {
-	vector<int> values{range...};
-	unsigned long int size = values.size();
-	if(size < 2 or size > 3)
-		throw bad_range_exception("Bad range exception: Range must include 2 or 3 values");
-	int start = normalize_index(values[0]);
-	int end = normalize_index(values[1]);
-	int step = 1;
-	if(size == 3)
-		step = values[2];
-	functional_list<T> ranged_list;
-	for(int i = start; i < end; i += step)
-		ranged_list.add((*this->v)[i]);
-	return ranged_list;
-}*/
-
 template<typename T>
-unsigned long functional_list<T>::m_normalize_index(long index) const noexcept {
-	unsigned long size = this->m_v->size();
+std::size_t functional_list<T>::m_normalize_index(long index) const noexcept {
+	std::size_t size = this->m_v->size();
 	while(index < 0)
 		index += size;
-	return static_cast<unsigned long>(index);
+	return static_cast<std::size_t>(index);
 }
 
 template<typename T>
 std::ostream& functional_list<T>::print(const std::string & separator, std::ostream & out) const noexcept {
-	for(unsigned long i = 0, size = this->m_v->size() - 1; i < size; i++)
+	for(std::size_t i = 0, size = this->m_v->size() - 1; i < size; i++)
 		out << (*this->m_v)[i] << separator;
 	if(this->m_v->size() > 0)
 		out << (*this->m_v)[this->m_v->size() - 1];
@@ -277,9 +224,6 @@ functional_list<T> functional_list<T>::filter(Func && test) const noexcept {
 template<typename T>
 template<typename Func, typename AccType>
 AccType functional_list<T>::reduce(AccType && accumulator, Func && reducer) const noexcept {
-#ifdef DEBUG_P
-	cout << "Reduce K &, Func &&\n";
-#endif
 	for(const T & x : *this->m_v)
 		accumulator = reducer(accumulator, x);
 	return accumulator;
@@ -288,9 +232,6 @@ AccType functional_list<T>::reduce(AccType && accumulator, Func && reducer) cons
 template<typename T>
 template<typename Func>
 functional_list<typename std::result_of<Func(T)>::type> functional_list<T>::map(Func && mapper) const noexcept {
-#ifdef DEBUG_P
-	cout << "Map <RetType, Func &&> &\n";
-#endif
 	functional_list<typename std::result_of<Func(T)>::type> fl;
 	for(const T & x : *this->m_v)
 		fl.m_v->push_back(mapper(x));
@@ -330,7 +271,7 @@ template<typename T>
 template<typename Func>
 functional_list<T> functional_list<T>::m_compare(Func && key, bool greater) const {
 
-	unsigned long size = this->m_v->size();
+	std::size_t size = this->m_v->size();
 
 	if(size == 0)
 		throw empty_list_exception();
@@ -339,7 +280,7 @@ functional_list<T> functional_list<T>::m_compare(Func && key, bool greater) cons
 	functional_list<T> results {*_value};
 
 	if(greater) {
-		for(unsigned long i = 1; i < size; i++) {
+		for(std::size_t i = 1; i < size; i++) {
 			auto first = key((*this->m_v)[i]);
 			auto second = key(*_value);
 			if(first > second) {
@@ -352,7 +293,7 @@ functional_list<T> functional_list<T>::m_compare(Func && key, bool greater) cons
 		}
 	}
 	else {
-		for(unsigned long i = 1; i < size; i++) {
+		for(std::size_t i = 1; i < size; i++) {
 			auto first = key((*this->m_v)[i]);
 			auto second = key(*_value);
 			if(first < second) {
