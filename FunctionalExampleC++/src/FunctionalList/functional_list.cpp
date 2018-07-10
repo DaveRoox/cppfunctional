@@ -367,9 +367,8 @@ bool functional_list<T>::contains(T && t) const noexcept {
 }
 
 template<typename T>
-ostream& operator<<(ostream & out, const functional_list<T> & t_func_list) noexcept {
-	t_func_list.print(" ", out);
-	return out;
+inline ostream& operator<<(ostream & out, const functional_list<T> & t_func_list) noexcept {
+	return t_func_list.print(" ", out);
 }
 
 template<typename T>
