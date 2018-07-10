@@ -48,7 +48,7 @@ functional_list<T>::functional_list(const std::initializer_list<T> & t_init_list
 }
 
 template<typename T>
-functional_list<T>::functional_list(const std::initializer_list<T> && t_init_list) noexcept {
+functional_list<T>::functional_list(std::initializer_list<T> && t_init_list) noexcept {
 	this->m_v = std::unique_ptr<vector<T>>(new vector<T>(move(t_init_list)));
 }
 
@@ -62,7 +62,7 @@ functional_list<T>::functional_list(const Elems & ... elems) noexcept {
 
 template<typename T>
 template<typename ... Elems>
-functional_list<T>::functional_list(const Elems && ... elems) noexcept {
+functional_list<T>::functional_list(Elems && ... elems) noexcept {
 	this->m_v = std::unique_ptr<vector<T>>(new vector<T>());
 	for(const T & elem : {elems...})
 		this->m_v->push_back(move(elem));
@@ -362,7 +362,7 @@ bool functional_list<T>::contains(T & t) const noexcept {
 }
 
 template<typename T>
-bool functional_list<T>::contains(const T && t) const noexcept {
+bool functional_list<T>::contains(T && t) const noexcept {
 	return contains(t);
 }
 

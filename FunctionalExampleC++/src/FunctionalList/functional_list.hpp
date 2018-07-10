@@ -47,13 +47,13 @@ namespace functional {
 			inline explicit functional_list(std::vector<T> &&) noexcept;
 			inline functional_list(functional_list &&) noexcept;
 			inline functional_list(const std::initializer_list<T> &) noexcept;
-			inline functional_list(const std::initializer_list<T> &&) noexcept;
+			inline functional_list(std::initializer_list<T> &&) noexcept;
 
 			template<typename ... Elems>
 			inline explicit functional_list(const Elems & ...) noexcept;
 
 			template<typename ... Elems>
-			inline explicit functional_list(const Elems && ...) noexcept;
+			inline explicit functional_list(Elems && ...) noexcept;
 
 			inline functional_list & operator=(const functional_list &) noexcept;
 			inline functional_list & operator=(functional_list &&) noexcept;
@@ -105,7 +105,7 @@ namespace functional {
 
 			inline bool contains(T &) const noexcept; // todo: bottleneck: O(n); O(1) through hashing; hashing for custom classes?
 			inline bool contains(const T &) const noexcept; // todo: same
-			inline bool contains(const T &&) const noexcept; // todo: same
+			inline bool contains(T &&) const noexcept; // todo: same
 
 			inline functional_list limit_to(unsigned long) const noexcept;
 
