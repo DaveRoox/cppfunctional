@@ -96,5 +96,8 @@ int main() {
     cout << "--The youngest is:--\n";
     cout << people.min([] (const Person & p) { return p.age; }).first().age << " years old" << endl << endl;
 
+    for(const auto & p : people)
+        print_person(p);
+
     return 0;
 }

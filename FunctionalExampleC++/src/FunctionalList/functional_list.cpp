@@ -408,4 +408,49 @@ const T & functional_list<T>::last() const {
     return this->m_v->at(this->m_v->size() - 1);
 }
 
+template<typename T>
+const vector<T> &functional_list<T>::to_vector() const noexcept {
+    return *this->m_v;
+}
+
+template<typename T>
+auto functional_list<T>::begin() const noexcept -> decltype(std::declval<std::vector<T>>().begin()) {
+	return this->m_v->begin();
+}
+
+template<typename T>
+auto functional_list<T>::cbegin() const noexcept -> decltype(std::declval<std::vector<T>>().cbegin()) {
+    return this->m_v->cbegin();
+}
+
+template<typename T>
+auto functional_list<T>::crbegin() const noexcept -> decltype(std::declval<std::vector<T>>().crbegin()) {
+    return this->m_v->crbegin();
+}
+
+template<typename T>
+auto functional_list<T>::rbegin() const noexcept -> decltype(std::declval<std::vector<T>>().rbegin()) {
+    return this->m_v->rbegin();
+}
+
+template<typename T>
+auto functional_list<T>::end() const noexcept -> decltype(std::declval<std::vector<T>>().end()) {
+    return this->m_v->end();
+}
+
+template<typename T>
+auto functional_list<T>::cend() const noexcept -> decltype(std::declval<std::vector<T>>().cend()) {
+    return this->m_v->cend();
+}
+
+template<typename T>
+auto functional_list<T>::rend() const noexcept -> decltype(std::declval<std::vector<T>>().rend()) {
+    return this->m_v->rend();
+}
+
+template<typename T>
+auto functional_list<T>::crend() const noexcept -> decltype(std::declval<std::vector<T>>().crend()) {
+    return this->m_v->crend();
+}
+
 #endif
