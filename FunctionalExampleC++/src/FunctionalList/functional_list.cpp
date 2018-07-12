@@ -124,31 +124,24 @@ functional_list<T> functional_list<T>::operator[](const std::initializer_list<lo
 
 	long input_size = values.size();
 
-	if(input_size < 1 or input_size > 3)
+	if(input_size < 2 or input_size > 3)
 		throw wrong_number_of_parameters_exception();
 
 	long v_size = this->m_v->size();
 
 	long start = values[0];
 	long normalized_start = m_normalize_index(start);
+    if(normalized_start >= v_size)
+        throw exceeded_list_size_exception(normalized_start, v_size);
 
-	long end = v_size - 1;
-	long normalized_end = end;
-	if(input_size >= 2) {
-		end = values[1];
-		normalized_end = m_normalize_index(end);
-	}
-	if(end >= v_size)
-		throw exceeded_list_size_exception();
+	long end = values[1];
+	long normalized_end = m_normalize_index(end);
+	if(normalized_end >= v_size)
+		throw exceeded_list_size_exception(normalized_end, v_size);
 
 	long step = 1;
-	if(input_size == 3) {
+	if(input_size == 3)
 		step = values[2];
-		if(step < 0)
-			step = -((-step) % v_size);
-		else
-			step %= v_size;
-	}
 	if(step == 0) {
 		cerr << values[2] << endl;
 		throw non_zero_step_exception();
@@ -165,7 +158,7 @@ functional_list<T> functional_list<T>::operator[](const std::initializer_list<lo
 			long i, ssize = v_size;
 			for(i = normalized_start; i < ssize; i += step)	// [ ... start >>> ... (size - 1) ]
 				ranged_list.add((*this->m_v)[i]);
-			i = m_normalize_index(i);
+			i = m_normalize_index(i) % ssize;
 			for(; i <= normalized_end; i+= step)			// [ ... c >>> ... >>> end ... ]
 				ranged_list.add((*this->m_v)[i]);
 		}
@@ -409,7 +402,7 @@ const T & functional_list<T>::last() const {
 }
 
 template<typename T>
-const vector<T> &functional_list<T>::to_vector() const noexcept {
+vector<T> functional_list<T>::to_vector() const noexcept {
     return *this->m_v;
 }
 

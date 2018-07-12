@@ -30,7 +30,7 @@ namespace functional {
     };
 
     class exceeded_list_size_exception : public std::runtime_error {
-    public: exceeded_list_size_exception(): std::runtime_error("Bad range exception: End index cannot exceed list size") {}
+    public: exceeded_list_size_exception(long index, long size): std::runtime_error("Bad range exception: the index cannot be equal to or exceed list size (" + std::to_string(index) + " >= " + std::to_string(size) + ")") {}
     };
 
 }
@@ -117,7 +117,7 @@ namespace functional {
 
         inline std::ostream& print(const std::string & = " ", std::ostream & = std::cout) const noexcept;
 
-        inline const std::vector<T> & to_vector() const noexcept;
+        inline std::vector<T> to_vector() const noexcept;
 
         inline auto begin() const noexcept -> decltype(std::declval<std::vector<T>>().begin());
 
