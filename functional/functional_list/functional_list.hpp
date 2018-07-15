@@ -1,5 +1,5 @@
 /*
- * functional_list.hpp
+ * functional.hpp
  *
  *  Created on: 30 mag 2018
  *      Author: daviderusso
@@ -8,34 +8,10 @@
 #ifndef FUNCTIONAL_LIST_HPP_
 #define FUNCTIONAL_LIST_HPP_
 
-#include <iostream>
 #include <vector>
+#include <iostream>
 
-namespace functional {
-
-    class empty_list_exception : public std::runtime_error {
-    public: empty_list_exception(): std::runtime_error("Bad index exception: empty list") {}
-    };
-
-    class index_out_of_range_exception : public std::runtime_error {
-    public: index_out_of_range_exception() : std::runtime_error("Bad index exception: index out of range") {}
-    };
-
-    class wrong_number_of_parameters_exception : public std::runtime_error {
-    public: wrong_number_of_parameters_exception(): std::runtime_error("Bad range exception: Range must include 2 '<start, end>' or 3 '<start, end, step>' values") {}
-    };
-
-    class non_zero_step_exception : public std::runtime_error {
-    public: non_zero_step_exception(): std::runtime_error("Bad range exception: Step cannot be 0") {}
-    };
-
-    class exceeded_list_size_exception : public std::runtime_error {
-    public: exceeded_list_size_exception(long index, long size): std::runtime_error("Bad range exception: the index cannot be equal to or exceed list size (" + std::to_string(index) + " >= " + std::to_string(size) + ")") {}
-    };
-
-}
-
-namespace functional {
+namespace functional{
 
     template<typename T>
     class functional_list {
@@ -64,16 +40,16 @@ namespace functional {
 
         functional_list operator[](const std::initializer_list<long> &) const;
         inline functional_list operator[](std::initializer_list<long> &&) const;
-        inline T & operator[](long);
+        inline T & operator[](long) const;
         inline std::size_t count() const noexcept;
 
         template<typename Func>
         inline functional_list filter(Func &&) const noexcept;
 
         template<typename Func>
-        inline functional_list<typename std::result_of<Func(T)>::type> map(Func &&) const noexcept;
+        inline functional_list<typename std::result_of<Func(const T &)>::type> map(Func &&) const noexcept;
 
-        template<typename Func, typename AccType = typename std::result_of<Func(T)>::type>
+        template<typename Func, typename AccType = typename std::result_of<Func(const T &)>::type>
         inline AccType reduce(AccType &&, Func &&) const noexcept;
 
         template<typename Func>

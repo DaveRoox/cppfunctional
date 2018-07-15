@@ -7,7 +7,7 @@
 #include <iostream>
 #include <iomanip>
 #include <random>
-#include "FunctionalList/functional_list.hpp"
+#include <functional_list/functional_list.hpp>
 
 using namespace std;
 using namespace functional;
@@ -87,7 +87,7 @@ int main() {
     cout << "--Is there at least one girl?--\n";
     cout << (people.any_match([] (const Person & p) { return p.gender == Person::gender_t::female; }) ? "YES" : "NO") << endl << endl;
 
-    cout << "--Are there only girls?--\n";
+    cout << "--Are them all girls?--\n";
     cout << (people.each_match([] (const Person & p) { return p.gender == Person::gender_t::female; }) ? "YES" : "NO") << endl << endl;
 
     cout << "--The oldest is:--\n";
