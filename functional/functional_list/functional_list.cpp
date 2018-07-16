@@ -21,50 +21,50 @@ functional_list<T>::functional_list() noexcept {
 }
 
 template<typename T>
-functional_list<T>::functional_list(const functional_list & t_other) noexcept {
+functional_list<T>::functional_list(const functional_list &t_other) noexcept {
     this->m_v = nullptr;
     *this = t_other;
 }
 
 template<typename T>
-functional_list<T>::functional_list(functional_list && t_other) noexcept {
+functional_list<T>::functional_list(functional_list &&t_other) noexcept {
     this->m_v = nullptr;
     *this = std::move(t_other);
 }
 
 template<typename T>
-functional_list<T>::functional_list(const std::vector<T> & t_vec) noexcept {
+functional_list<T>::functional_list(const std::vector<T> &t_vec) noexcept {
     this->m_v = std::unique_ptr<std::vector<T>>(new std::vector<T>(t_vec));
 }
 
 template<typename T>
-functional_list<T>::functional_list(std::vector<T> && t_vec) noexcept {
+functional_list<T>::functional_list(std::vector<T> &&t_vec) noexcept {
     this->m_v = std::unique_ptr<std::vector<T>>(new std::vector<T>(std::move(t_vec)));
 }
 
 template<typename T>
-functional_list<T>::functional_list(const std::initializer_list<T> & t_init_list) noexcept {
+functional_list<T>::functional_list(const std::initializer_list<T> &t_init_list) noexcept {
     this->m_v = std::unique_ptr<std::vector<T>>(new std::vector<T>(t_init_list));
 }
 
 template<typename T>
-functional_list<T>::functional_list(std::initializer_list<T> && t_init_list) noexcept {
+functional_list<T>::functional_list(std::initializer_list<T> &&t_init_list) noexcept {
     this->m_v = std::unique_ptr<std::vector<T>>(new std::vector<T>(std::move(t_init_list)));
 }
 
 template<typename T>
 template<typename ... Elems>
-functional_list<T>::functional_list(const Elems & ... elems) noexcept {
+functional_list<T>::functional_list(const Elems &... elems) noexcept {
     this->m_v = std::unique_ptr<std::vector<T>>(new std::vector<T>());
-    for(const T & elem : {elems...})
+    for (const T &elem : {elems...})
         this->m_v->push_back(elem);
 }
 
 template<typename T>
 template<typename ... Elems>
-functional_list<T>::functional_list(Elems && ... elems) noexcept {
+functional_list<T>::functional_list(Elems &&... elems) noexcept {
     this->m_v = std::unique_ptr<std::vector<T>>(new std::vector<T>());
-    for(const T & elem : {elems...})
+    for (const T &elem : {elems...})
         this->m_v->push_back(std::move(elem));
 }
 
@@ -74,8 +74,8 @@ functional_list<T>::~functional_list() noexcept {
 }
 
 template<typename T>
-functional_list<T> & functional_list<T>::operator=(const functional_list<T> & t_other) noexcept {
-    if(this != &t_other) {
+functional_list<T> &functional_list<T>::operator=(const functional_list<T> &t_other) noexcept {
+    if (this != &t_other) {
         this->m_v.reset();
         this->m_v = std::unique_ptr<std::vector<T>>(new std::vector<T>(*t_other.m_v));
     }
@@ -83,8 +83,8 @@ functional_list<T> & functional_list<T>::operator=(const functional_list<T> & t_
 }
 
 template<typename T>
-functional_list<T> & functional_list<T>::operator=(functional_list<T> && t_other) noexcept {
-    if(this != &t_other) {
+functional_list<T> &functional_list<T>::operator=(functional_list<T> &&t_other) noexcept {
+    if (this != &t_other) {
         this->m_v.reset();
         this->m_v = std::unique_ptr<std::vector<T>>(new std::vector<T>(move(*t_other.m_v)));
     }
@@ -97,83 +97,82 @@ std::size_t functional_list<T>::count() const noexcept {
 }
 
 template<typename T>
-T & functional_list<T>::operator[](long index) const {
+T &functional_list<T>::operator[](long index) const {
     std::size_t size = this->m_v->size();
-    if(size == 0)
+    if (size == 0)
         throw empty_list_exception();
-    if(index >= (long)size)
+    if (index >= (long) size)
         throw index_out_of_range_exception();
     index = m_normalize_index(index);
     return (*this->m_v)[index];
 }
 
 template<typename T>
-void functional_list<T>::add(const T & elem) noexcept {
+void functional_list<T>::add(const T &elem) noexcept {
     this->m_v->push_back(elem);
 }
 
 template<typename T>
-void functional_list<T>::add(T && elem) noexcept {
+void functional_list<T>::add(T &&elem) noexcept {
     this->m_v->push_back(std::move(elem));
 }
 
 template<typename T>
-functional_list<T> functional_list<T>::operator[](const std::initializer_list<long> & range) const {
+functional_list<T> functional_list<T>::operator[](const std::initializer_list<long> &range) const {
 
     std::vector<long> values{range};
 
     long input_size = values.size();
 
-    if(input_size < 2 or input_size > 3)
+    if (input_size < 2 or input_size > 3)
         throw wrong_number_of_parameters_exception();
 
     long v_size = this->m_v->size();
 
     long start = values[0];
     long normalized_start = m_normalize_index(start);
-    if(normalized_start >= v_size)
+    if (normalized_start >= v_size)
         throw exceeded_list_size_exception(normalized_start, v_size);
 
     long end = values[1];
     long normalized_end = m_normalize_index(end);
-    if(normalized_end >= v_size)
+    if (normalized_end >= v_size)
         throw exceeded_list_size_exception(normalized_end, v_size);
 
     long step = 1;
-    if(input_size == 3)
+    if (input_size == 3)
         step = values[2];
-    if(step == 0) {
+    if (step == 0) {
         std::cerr << values[2] << std::endl;
         throw non_zero_step_exception();
     }
 
     functional_list<T> ranged_list;
 
-    if(step > 0) {
+    if (step > 0) {
 
-        if(normalized_end >= normalized_start)				// [ ... start >>> ... >>> end ... ]
-            for(long i = normalized_start; i <= normalized_end; i += step)
+        if (normalized_end >= normalized_start)                // [ ... start >>> ... >>> end ... ]
+            for (long i = normalized_start; i <= normalized_end; i += step)
                 ranged_list.add((*this->m_v)[i]);
-        else {												// [ ... >>> end ... start >>> ... ]
+        else {                                                // [ ... >>> end ... start >>> ... ]
             long i, ssize = v_size;
-            for(i = normalized_start; i < ssize; i += step)	// [ ... start >>> ... (size - 1) ]
+            for (i = normalized_start; i < ssize; i += step)    // [ ... start >>> ... (size - 1) ]
                 ranged_list.add((*this->m_v)[i]);
             i = m_normalize_index(i) % ssize;
-            for(; i <= normalized_end; i+= step)			// [ ... c >>> ... >>> end ... ]
+            for (; i <= normalized_end; i += step)            // [ ... c >>> ... >>> end ... ]
                 ranged_list.add((*this->m_v)[i]);
         }
 
-    }
-    else { // step < 0
-        if(normalized_end <= normalized_start)				// [ ... end <<< ... <<< start ... ]
-            for(long i = normalized_start; i >= normalized_end; i += step)
+    } else { // step < 0
+        if (normalized_end <= normalized_start)                // [ ... end <<< ... <<< start ... ]
+            for (long i = normalized_start; i >= normalized_end; i += step)
                 ranged_list.add((*this->m_v)[i]);
-        else {												// [ ... <<< start ... end <<< ... ]
+        else {                                                // [ ... <<< start ... end <<< ... ]
             long i;
-            for(i = normalized_start; i >= 0; i += step)	// [ 0 ... <<< start ... ]
+            for (i = normalized_start; i >= 0; i += step)    // [ 0 ... <<< start ... ]
                 ranged_list.add((*this->m_v)[i]);
             i = m_normalize_index(i);
-            for(; i >= normalized_end; i+= step)			// [ ... end <<< ... <<< (size - c)... ]
+            for (; i >= normalized_end; i += step)            // [ ... end <<< ... <<< (size - c)... ]
                 ranged_list.add((*this->m_v)[i]);
         }
 
@@ -183,104 +182,103 @@ functional_list<T> functional_list<T>::operator[](const std::initializer_list<lo
 }
 
 template<typename T>
-functional_list<T> functional_list<T>::operator[](std::initializer_list<long> && range) const {
+functional_list<T> functional_list<T>::operator[](std::initializer_list<long> &&range) const {
     return operator[](range);
 }
 
 template<typename T>
 std::size_t functional_list<T>::m_normalize_index(long index) const noexcept {
     std::size_t size = this->m_v->size();
-    while(index < 0)
+    while (index < 0)
         index += size;
     return static_cast<std::size_t>(index);
 }
 
 template<typename T>
-std::ostream& functional_list<T>::print(const std::string & separator, std::ostream & out) const noexcept {
-    for(std::size_t i = 0, size = this->m_v->size() - 1; i < size; i++)
+std::ostream &functional_list<T>::print(const std::string &separator, std::ostream &out) const noexcept {
+    for (std::size_t i = 0, size = this->m_v->size() - 1; i < size; i++)
         out << (*this->m_v)[i] << separator;
-    if(this->m_v->size() > 0)
+    if (this->m_v->size() > 0)
         out << (*this->m_v)[this->m_v->size() - 1];
     return out;
 }
 
 template<typename T>
 template<typename Func>
-functional_list<T> functional_list<T>::filter(Func && test) const noexcept {
+functional_list<T> functional_list<T>::filter(Func &&test) const noexcept {
     functional_list<T> fl;
-    for(const T & x : *this->m_v)
-        if(test(x))
+    for (const T &x : *this->m_v)
+        if (test(x))
             fl.m_v->push_back(x);
     return fl;
 }
 
 template<typename T>
 template<typename Func, typename AccType>
-AccType functional_list<T>::reduce(AccType && accumulator, Func && reducer) const noexcept {
-    for(const T & x : *this->m_v)
+AccType functional_list<T>::reduce(AccType &&accumulator, Func &&reducer) const noexcept {
+    for (const T &x : *this->m_v)
         accumulator = reducer(accumulator, x);
     return accumulator;
 }
 
 template<typename T>
 template<typename Func>
-functional_list<typename std::result_of<Func(const T &)>::type> functional_list<T>::map(Func && mapper) const noexcept {
+functional_list<typename std::result_of<Func(const T &)>::type> functional_list<T>::map(Func &&mapper) const noexcept {
     functional_list<typename std::result_of<Func(const T &)>::type> fl;
-    for(const T & x : *this->m_v)
+    for (const T &x : *this->m_v)
         fl.m_v->push_back(mapper(x));
     return fl;
 }
 
 template<typename T>
 template<typename Func>
-void functional_list<T>::for_each(Func && f) const noexcept {
-    for(const T & x : *this->m_v)
+void functional_list<T>::for_each(Func &&f) const noexcept {
+    for (const T &x : *this->m_v)
         f(x);
 }
 
 template<typename T>
 template<typename Func>
-functional_list<T> functional_list<T>::max(Func && key) const {
+functional_list<T> functional_list<T>::max(Func &&key) const {
     return m_compare(key, true);
 }
 
 template<typename T>
 template<typename Func>
-functional_list<T> functional_list<T>::min(Func && key) const {
+functional_list<T> functional_list<T>::min(Func &&key) const {
     return m_compare(key, false);
 }
 
 template<typename T>
 functional_list<T> functional_list<T>::max() const {
-    return m_compare([] (const T & arg) -> const T & { return arg; }, true);
+    return m_compare([](const T &arg) -> const T & { return arg; }, true);
 }
 
 template<typename T>
 functional_list<T> functional_list<T>::min() const {
-    return m_compare([] (const T & arg) -> const T & { return arg; }, false);
+    return m_compare([](const T &arg) -> const T & { return arg; }, false);
 }
 
 template<typename T>
 template<typename Func>
-functional_list<T> functional_list<T>::m_compare(Func && key, bool greater) const {
+functional_list<T> functional_list<T>::m_compare(Func &&key, bool greater) const {
 
     std::size_t size = this->m_v->size();
 
-    if(size == 0)
+    if (size == 0)
         throw empty_list_exception();
 
-    const T * _value = &(*this->m_v)[0];
-    functional_list<T> results {*_value};
+    const T *_value = &(*this->m_v)[0];
+    functional_list<T> results{*_value};
 
-    for(std::size_t i = 1; i < size; i++) {
+    for (std::size_t i = 1; i < size; i++) {
         auto first = key((*this->m_v)[i]);
         auto second = key(*_value);
-        if((greater and first > second) or (!greater and first < second)){
+        if ((greater and first > second) or (!greater and first < second)) {
             _value = &(*this->m_v)[i];
             results.m_v->clear();
             results.add(*_value);
-        }
-        else if(first == second)
+        } else if (first == second)
             results.add(*_value);
     }
 
@@ -289,27 +287,27 @@ functional_list<T> functional_list<T>::m_compare(Func && key, bool greater) cons
 
 template<typename T>
 template<typename Func>
-bool functional_list<T>::each_match(Func && test) const noexcept {
-    for(const T & x : *this->m_v)
-        if(!test(x))
+bool functional_list<T>::each_match(Func &&test) const noexcept {
+    for (const T &x : *this->m_v)
+        if (!test(x))
             return false;
     return true;
 }
 
 template<typename T>
 template<typename Func>
-bool functional_list<T>::any_match(Func && test) const noexcept {
-    for(const T & x : *this->m_v)
-        if(test(x))
+bool functional_list<T>::any_match(Func &&test) const noexcept {
+    for (const T &x : *this->m_v)
+        if (test(x))
             return true;
     return false;
 }
 
 template<typename T>
 template<typename Func>
-bool functional_list<T>::no_match(Func && test) const noexcept {
-    for(const T & x : *this->m_v)
-        if(test(x))
+bool functional_list<T>::no_match(Func &&test) const noexcept {
+    for (const T &x : *this->m_v)
+        if (test(x))
             return false;
     return true;
 }
@@ -317,35 +315,35 @@ bool functional_list<T>::no_match(Func && test) const noexcept {
 template<typename T>
 functional_list<T> functional_list<T>::uniques() const noexcept {
     functional_list<T> fl;
-    for(T & x : *this->m_v)
-        if(!fl.contains(x))
+    for (T &x : *this->m_v)
+        if (!fl.contains(x))
             fl.add(x);
     return fl;
 }
 
 template<typename T>
-bool functional_list<T>::contains(const T & t) const noexcept {
-    for(const T & x : *this->m_v)
-        if(x == t)
+bool functional_list<T>::contains(const T &t) const noexcept {
+    for (const T &x : *this->m_v)
+        if (x == t)
             return true;
     return false;
 }
 
 template<typename T>
-bool functional_list<T>::contains(T & t) const noexcept {
-    for(T & x : *this->m_v)
-        if(x == t)
+bool functional_list<T>::contains(T &t) const noexcept {
+    for (T &x : *this->m_v)
+        if (x == t)
             return true;
     return false;
 }
 
 template<typename T>
-bool functional_list<T>::contains(T && t) const noexcept {
+bool functional_list<T>::contains(T &&t) const noexcept {
     return contains(t);
 }
 
 template<typename T>
-inline std::ostream& operator<<(std::ostream & out, const functional_list<T> & t_func_list) noexcept {
+inline std::ostream &operator<<(std::ostream &out, const functional_list<T> &t_func_list) noexcept {
     return t_func_list.print(" ", out);
 }
 
@@ -359,7 +357,7 @@ functional_list<T> functional_list<T>::limit_to(unsigned long max_elements) cons
 
 template<typename T>
 template<typename Func>
-functional_list<T> functional_list<T>::sort(Func && func) const noexcept {
+functional_list<T> functional_list<T>::sort(Func &&func) const noexcept {
     functional_list<T> fl{*this};
     std::sort(fl.m_v->begin(), fl.m_v->end(), func);
     return fl;
@@ -368,20 +366,21 @@ functional_list<T> functional_list<T>::sort(Func && func) const noexcept {
 template<typename T>
 functional_list<T> functional_list<T>::sort(bool descending) const noexcept {
     functional_list<T> fl{*this};
-    std::sort(fl.m_v->begin(), fl.m_v->end(), [descending](const T & t1, const T & t2) { return descending ? t1 > t2 : t2 > t1; });
+    std::sort(fl.m_v->begin(), fl.m_v->end(),
+              [descending](const T &t1, const T &t2) { return descending ? t1 > t2 : t2 > t1; });
     return fl;
 }
 
 template<typename T>
-const T & functional_list<T>::first() const {
-    if(this->m_v->empty())
+const T &functional_list<T>::first() const {
+    if (this->m_v->empty())
         throw empty_list_exception();
     return this->m_v->at(0);
 }
 
 template<typename T>
-const T & functional_list<T>::last() const {
-    if(this->m_v->empty())
+const T &functional_list<T>::last() const {
+    if (this->m_v->empty())
         throw empty_list_exception();
     return this->m_v->at(this->m_v->size() - 1);
 }

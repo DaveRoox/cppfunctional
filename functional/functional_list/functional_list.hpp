@@ -11,7 +11,7 @@
 #include <vector>
 #include <iostream>
 
-namespace functional{
+namespace functional {
 
     template<typename T>
     class functional_list {
@@ -19,28 +19,39 @@ namespace functional{
     public:
 
         inline functional_list() noexcept;
+
         inline functional_list(const functional_list &) noexcept;
+
         inline explicit functional_list(const std::vector<T> &) noexcept;
+
         inline explicit functional_list(std::vector<T> &&) noexcept;
+
         inline functional_list(functional_list &&) noexcept;
+
         inline functional_list(const std::initializer_list<T> &) noexcept;
+
         inline functional_list(std::initializer_list<T> &&) noexcept;
 
         template<typename ... Elems>
-        inline explicit functional_list(const Elems & ...) noexcept;
+        inline explicit functional_list(const Elems &...) noexcept;
 
         template<typename ... Elems>
-        inline explicit functional_list(Elems && ...) noexcept;
+        inline explicit functional_list(Elems &&...) noexcept;
 
-        inline functional_list & operator=(const functional_list &) noexcept;
-        inline functional_list & operator=(functional_list &&) noexcept;
+        inline functional_list &operator=(const functional_list &) noexcept;
+
+        inline functional_list &operator=(functional_list &&) noexcept;
 
         inline void add(const T &) noexcept;
+
         inline void add(T &&) noexcept;
 
         functional_list operator[](const std::initializer_list<long> &) const;
+
         inline functional_list operator[](std::initializer_list<long> &&) const;
-        inline T & operator[](long) const;
+
+        inline T &operator[](long) const;
+
         inline std::size_t count() const noexcept;
 
         template<typename Func>
@@ -65,9 +76,9 @@ namespace functional{
 
         inline functional_list min() const;
 
-        inline const T & first() const;
+        inline const T &first() const;
 
-        inline const T & last() const;
+        inline const T &last() const;
 
         template<typename Func>
         inline bool each_match(Func &&) const noexcept;
@@ -78,9 +89,11 @@ namespace functional{
         template<typename Func>
         inline bool no_match(Func &&) const noexcept;
 
-        inline functional_list uniques() const noexcept; // todo: its complexity depends on contains() method. Currently O(n^2)
+        inline functional_list
+        uniques() const noexcept; // todo: its complexity depends on contains() method. Currently O(n^2)
 
-        inline bool contains(T &) const noexcept; // todo: bottleneck: O(n); O(1) through hashing; hashing for custom classes?
+        inline bool
+        contains(T &) const noexcept; // todo: bottleneck: O(n); O(1) through hashing; hashing for custom classes?
         inline bool contains(const T &) const noexcept; // todo: same
         inline bool contains(T &&) const noexcept; // todo: same
 
@@ -91,7 +104,7 @@ namespace functional{
 
         inline functional_list sort(bool descending = false) const noexcept;
 
-        inline std::ostream& print(const std::string & = " ", std::ostream & = std::cout) const noexcept;
+        inline std::ostream &print(const std::string & = " ", std::ostream & = std::cout) const noexcept;
 
         inline std::vector<T> to_vector() const noexcept;
 
@@ -124,7 +137,8 @@ namespace functional{
 
         std::unique_ptr<std::vector<T>> m_v;
 
-        template<typename O> friend class functional_list;
+        template<typename O> friend
+        class functional_list;
 
     };
 
