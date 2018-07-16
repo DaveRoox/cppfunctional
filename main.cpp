@@ -33,10 +33,11 @@ struct Person {
 
 int main() {
 
-    functional_list<Person> people = {
+    functional_vector<Person> people = {
             Person("bob", "postman", 28, Person::gender_t::male),
             Person("alice", "postwoman", 27, Person::gender_t::female),
-            Person("miley", "cyrus", 20, Person::gender_t::male),
+            Person("miley", "cyrus", 20, Person::gender_t::female),
+            Person("selena", "gomez", 20, Person::gender_t::female),
             Person("john", "smith", 25, Person::gender_t::male),
             Person("random", "old boy", 95, Person::gender_t::male),
             Person("random", "old girl", 92, Person::gender_t::female)
@@ -79,7 +80,7 @@ int main() {
 
     cout << "--The average age is:--\n";
     cout << fixed << setprecision(2)
-         << people.reduce(0.0, [](double acc, const Person &p) -> double { return acc + p.age; }) / people.count()
+         << people.reduce(0.0, [](double acc, const Person &p) -> double { return acc + p.age; }) / people.size()
          << endl << endl;
 
     cout << "--The list of uniques names is:--\n";
@@ -99,13 +100,23 @@ int main() {
          << endl << endl;
 
     cout << "--The oldest is:--\n";
-    cout << people.max([](const Person &p) { return p.age; }).first().age << " years old" << endl << endl;
+    cout << people.maxBy([](const Person &p) { return p.age; }).first().age << " years old" << endl << endl;
 
     cout << "--The youngest is:--\n";
-    cout << people.min([](const Person &p) { return p.age; }).first().age << " years old" << endl << endl;
+    cout << people.minBy([](const Person &p) { return p.age; }).first().age << " years old" << endl << endl;
 
     for (const auto &p : people[{1, -2}])
         print_person(p);
+
+    for (const auto &x : people.groupBy([](const auto &p) { return p.age; })) {
+        cout << "Age: " << x.first << endl << "People:\n";
+        x.second.printBy(
+                [](const auto &p) { return "'" + p.name + " " + p.last_name + "'"; },
+                "[",
+                ", ",
+                "]"
+        ) << endl;
+    }
 
     return 0;
 }
