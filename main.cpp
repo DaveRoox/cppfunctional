@@ -43,9 +43,8 @@ int main() {
             Person("random", "old girl", 92, Person::gender_t::female)
     };
 
-    auto print_person = [](const Person &p) {
-        cout << p.name << " " << p.last_name << " is " << p.age << " years old\n";
-    };
+    auto print_person =
+            [] (const Person &p) { cout << p.name << " " << p.last_name << " is " << p.age << " years old\n"; };
 
     cout << "--First 2 oldest male people are:--\n";
     people
@@ -95,7 +94,7 @@ int main() {
     cout << (people.any_match([](const Person &p) { return p.gender == Person::gender_t::female; }) ? "YES" : "NO")
          << endl << endl;
 
-    cout << "--Are them all girls?--\n";
+    cout << "--Are they all girls?--\n";
     cout << (people.each_match([](const Person &p) { return p.gender == Person::gender_t::female; }) ? "YES" : "NO")
          << endl << endl;
 
