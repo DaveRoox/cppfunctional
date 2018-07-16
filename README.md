@@ -33,7 +33,7 @@ struct Person {
 
 Then, we can initialize our functional_vector and define an utility lambda:
 
-```c++17
+```c++
 functional_vector<Person> people = {
             Person("bob", "postman", 28, Person::gender_t::male),
             Person("alice", "postwoman", 27, Person::gender_t::female),
@@ -51,7 +51,7 @@ auto print_person =
 
 Let's try some method: **filter**, **sort**, **limit_to** and **for_each**
 
-```c++17
+```c++
 cout << "--First 2 oldest male people are:--\n";
 people
         .filter([](const Person &p) {
@@ -72,7 +72,7 @@ output:
 
 Descending order by age:
 
-```c++17
+```c++
 cout << "--People ages in descending order are:--\n";
 people
         .map([](const Person &p) {
@@ -90,7 +90,7 @@ output:
 
 Playing with **ranges** and **negative indices**:
 
-```c++17
+```c++
 cout << "Last Person in the array is:\n";
 print_person(people[-1]);
 
@@ -108,7 +108,7 @@ output:
 
 Average age:
 
-```c++17
+```c++
 cout << "--The average age is:--\n";
 cout << fixed << setprecision(2)
      << people.reduce(0.0, [](double acc, const Person &p) -> double { return acc + p.age; }) / people.size()
@@ -123,7 +123,7 @@ output:
 
 Some other methods: **any_match**, **each_match**, **maxBy**, **minBy**, **first**
 
-```c++17
+```c++
 cout << "--Is there at least one girl?--\n";
 cout << (people.any_match([](const Person &p) { return p.gender == Person::gender_t::female; }) ? "YES" : "NO")
      << endl << endl;
@@ -147,7 +147,7 @@ output:
 
 As last example the **groupBy** method:
 
-```c++17
+```c++
 cout << "--The people grouped by age are divided in the following way:--\n";
 for (const auto &x : people.groupBy([](const auto &p) { return p.age; })) {
     auto &age = x.first;
