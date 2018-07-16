@@ -105,16 +105,16 @@ int main() {
     cout << "--The youngest is:--\n";
     cout << people.minBy([](const Person &p) { return p.age; }).first().age << " years old" << endl << endl;
 
-    for (const auto &p : people[{1, -2}])
-        print_person(p);
-
+    cout << "--The people grouped by age are divided in the following way:--\n";
     for (const auto &x : people.groupBy([](const auto &p) { return p.age; })) {
-        cout << "Age: " << x.first << endl << "People:\n";
-        x.second.printBy(
+        auto &age = x.first;
+        auto &people_with_that_age = x.second;
+        cout << age << " Y/O: ";
+        people_with_that_age.printBy(
                 [](const auto &p) { return "'" + p.name + " " + p.last_name + "'"; },
-                "[",
-                ", ",
-                "]"
+                "[", // prefix
+                ", ", // separator
+                "]" // postfix
         ) << endl;
     }
 
