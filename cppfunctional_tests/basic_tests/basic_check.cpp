@@ -2,7 +2,7 @@
 // Created by Davide Russo on 15/07/18.
 //
 
-#include <functional_list/functional_vector.hpp>
+#include <functional.hpp>
 #include "gtest/gtest.h"
 
 using namespace functional;
@@ -26,7 +26,7 @@ public:
 };
 
 TEST_F(FunctionalTest, test_filter) {
-    auto count = p_func_list->filter([](auto x) { return x < 0; }).count();
+    auto count = p_func_list->filter([](auto x) { return x < 0; }).size();
     EXPECT_EQ(2, count);
 }
 

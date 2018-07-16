@@ -1,5 +1,5 @@
 /*
- * functional.cpp
+ * cppfunctional.cpp
  *
  *  Created on: 30 mag 2018
  *      Author: daviderusso
@@ -8,7 +8,7 @@
 #define FUNCTIONAL_VECTOR_CPP_
 
 #include "functional_vector.hpp"
-#include "../functional_exceptions/functional_exceptions.hpp"
+#include "../cppfunctional_exceptions/functional_exceptions.hpp"
 
 #include <algorithm>
 

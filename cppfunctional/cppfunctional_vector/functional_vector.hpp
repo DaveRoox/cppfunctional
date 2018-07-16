@@ -1,5 +1,5 @@
 /*
- * functional.hpp
+ * cppfunctional.hpp
  *
  *  Created on: 30 mag 2018
  *      Author: daviderusso

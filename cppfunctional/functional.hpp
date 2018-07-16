@@ -7,7 +7,7 @@
 
 namespace functional {}
 
-#include <functional_vector/functional_vector.hpp>
-#include <functional_exceptions/functional_exceptions.hpp>
+#include <cppfunctional_vector/functional_vector.hpp>
+#include <cppfunctional_exceptions/functional_exceptions.hpp>
 
 #endif //FUNCTIONAL_LIST_FUNCTIONAL_H

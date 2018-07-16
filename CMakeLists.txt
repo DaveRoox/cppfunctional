@@ -3,11 +3,11 @@ project(functional_list)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(main main.cpp functional/functional.hpp)
+add_executable(main main.cpp cppfunctional/functional.hpp)
 
-include_directories(functional)
+include_directories(cppfunctional)
 
-add_subdirectory(functional)
-add_subdirectory(functional_tests)
+add_subdirectory(cppfunctional)
+add_subdirectory(cppfunctional_tests)
 
 target_link_libraries(main ${functional})
