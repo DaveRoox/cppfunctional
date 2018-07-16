@@ -95,8 +95,6 @@ namespace functional {
         inline std::ostream &printBy(Func &&, const std::string &prefix = "", const std::string &separator = " ",
                                      const std::string &postfix = "", std::ostream & = std::cout) const noexcept;
 
-        inline std::vector<T> to_vector() const noexcept;
-
     protected:
 
         inline unsigned long m_normalize_index(long) const noexcept;

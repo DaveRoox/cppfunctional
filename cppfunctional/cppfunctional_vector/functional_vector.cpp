@@ -331,11 +331,6 @@ namespace functional {
         return this->at(this->size() - 1);
     }
 
-    template<typename T>
-    std::vector<T> functional_vector<T>::to_vector() const noexcept {
-        return *this->m_v;
-    }
-
 }
 
 #endif
