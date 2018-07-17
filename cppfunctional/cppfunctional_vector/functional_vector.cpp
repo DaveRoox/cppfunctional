@@ -116,24 +116,20 @@ namespace functional {
     std::ostream &
     functional_vector<T>::print(const std::string &prefix, const std::string &separator, const std::string &postfix,
                                 std::ostream &out) const noexcept {
-        out << prefix;
-        for (std::size_t i = 0, size = this->size() - 1; i < size; i++)
-            out << this->std::vector<T>::operator[](i) << separator;
-        if (this->size() > 0)
-            out << this->std::vector<T>::operator[](this->size() - 1);
-        out << postfix;
-        return out;
+        return print_by([] (const T & t) -> const T & { return t; }, prefix, separator, postfix, out);
     }
 
     template<typename T>
     template<typename Func>
-    std::ostream &functional_vector<T>::printBy(Func &&printer, const std::string &prefix, const std::string &separator,
-                                                const std::string &postfix, std::ostream &out) const noexcept {
+    std::ostream &functional_vector<T>::print_by(Func &&printer, const std::string &prefix,
+                                                 const std::string &separator,
+                                                 const std::string &postfix, std::ostream &out) const noexcept {
         out << prefix;
-        for (std::size_t i = 0, size = this->size() - 1; i < size; i++)
-            out << printer(this->std::vector<T>::operator[](i)) << separator;
-        if (this->size() > 0)
+        if (this->size() > 0) {
+            for (std::size_t i = 0, size = this->size() - 1; i < size; i++)
+                out << printer(this->std::vector<T>::operator[](i)) << separator;
             out << printer(this->std::vector<T>::operator[](this->size() - 1));
+        }
         out << postfix;
         return out;
     }
@@ -169,7 +165,7 @@ namespace functional {
     template<typename T>
     template<typename Func>
     std::map<typename std::result_of<Func(const T &)>::type, functional_vector<T>>
-    functional_vector<T>::groupBy(Func &&key) const noexcept {
+    functional_vector<T>::group_by(Func &&key) const noexcept {
         std::map<typename std::result_of<Func(const T &)>::type, functional_vector<T>> fmap;
         for (const T &x : *this)
             fmap[key(x)].add(x);
@@ -185,13 +181,13 @@ namespace functional {
 
     template<typename T>
     template<typename Func>
-    functional_vector<T> functional_vector<T>::maxBy(Func &&key) const {
+    functional_vector<T> functional_vector<T>::max_by(Func &&key) const {
         return m_compare(key, true);
     }
 
     template<typename T>
     template<typename Func>
-    functional_vector<T> functional_vector<T>::minBy(Func &&key) const {
+    functional_vector<T> functional_vector<T>::min_by(Func &&key) const {
         return m_compare(key, false);
     }
 

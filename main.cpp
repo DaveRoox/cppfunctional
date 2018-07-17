@@ -99,23 +99,25 @@ int main() {
          << endl << endl;
 
     cout << "--The oldest is:--\n";
-    cout << people.maxBy([](const Person &p) { return p.age; }).first().age << " years old" << endl << endl;
+    cout << people.max_by([](const Person &p) { return p.age; }).first().age << " years old" << endl << endl;
 
     cout << "--The youngest is:--\n";
-    cout << people.minBy([](const Person &p) { return p.age; }).first().age << " years old" << endl << endl;
+    cout << people.min_by([](const Person &p) { return p.age; }).first().age << " years old" << endl << endl;
 
     cout << "--The people grouped by age are divided in the following way:--\n";
-    for (const auto &x : people.groupBy([](const auto &p) { return p.age; })) {
+    for (const auto &x : people.group_by([](const auto &p) { return p.age; })) {
         auto &age = x.first;
         auto &people_with_that_age = x.second;
         cout << age << " Y/O: ";
-        people_with_that_age.printBy(
+        people_with_that_age.print_by(
                 [](const auto &p) { return "'" + p.name + " " + p.last_name + "'"; },
                 "[", // prefix
                 ", ", // separator
                 "]" // postfix
         ) << endl;
     }
+
+    functional_vector<int>{}.print();
 
     return 0;
 }

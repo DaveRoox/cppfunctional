@@ -44,10 +44,10 @@ namespace functional {
         inline void for_each(Func &&) const noexcept;
 
         template<typename Func>
-        inline functional_vector maxBy(Func &&) const;
+        inline functional_vector max_by(Func &&) const;
 
         template<typename Func>
-        inline functional_vector minBy(Func &&) const;
+        inline functional_vector min_by(Func &&) const;
 
         inline functional_vector max() const;
 
@@ -55,7 +55,7 @@ namespace functional {
 
         template<typename Func>
         inline std::map<typename std::result_of<Func(const T &)>::type, functional_vector<T>>
-        groupBy(Func &&) const noexcept;
+        group_by(Func &&) const noexcept;
 
         inline const T &first() const;
 
@@ -92,8 +92,9 @@ namespace functional {
               std::ostream & = std::cout) const noexcept;
 
         template<typename Func>
-        inline std::ostream &printBy(Func &&, const std::string &prefix = "", const std::string &separator = " ",
-                                     const std::string &postfix = "", std::ostream & = std::cout) const noexcept;
+        inline std::ostream &print_by(Func &&, const std::string &prefix = "",
+                                      const std::string &separator = " ",
+                                      const std::string &postfix = "", std::ostream & = std::cout) const noexcept;
 
     protected:
 
